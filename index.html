@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CricScore Premium</title>
+    <style>
+        :root {
+            /* Modern Premium Color Palette */
+            --primary: #2c3e50; /* Dark premium blue */
+            --primary-light: #34495e; /* Lighter shade for gradients */
+            --secondary: #2ecc71; /* Vibrant green */
+            --danger: #e74c3c; /* Modern red */
+            --warning: #f39c12; /* Rich orange/yellow */
+            --bg-color: #f5f6fa; /* Light gray background */
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #7f8c8d;
+            --text-on-primary: #ffffff;
+            
+            /* Premium design elements */
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 12px;
+            --font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --transition: 0.3s ease-in-out;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-family); }
+        
+        body { 
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); /* Subtle background gradient */
+            color: var(--text-main); 
+            -webkit-tap-highlight-color: transparent; 
+            padding-bottom: 50px;
+        }
+
+        /* Navigation */
+        nav { 
+            background: var(--primary); /* Modern deep blue */
+            color: var(--text-on-primary); 
+            padding: 15px 30px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            border-bottom: 2px solid var(--secondary); /* Clean secondary line */
+        }
+        .nav-brand { font-size: 24px; font-weight: 800; letter-spacing: 1.5px; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links button { 
+            background: none; 
+            border: none; 
+            color: #a4b0be; /* Muted text */
+            font-size: 17px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            transition: var(--transition); 
+            position: relative;
+            padding-bottom: 5px;
+        }
+        .nav-links button.active { 
+            color: var(--text-on-primary); 
+        }
+        .nav-links button.active::after { 
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--secondary); /* Modern green line below active tab */
+            border-radius: 2px;
+        }
+
+        /* Container & Screens */
+        .container { max-width: 650px; margin: 0 auto; padding: 30px; }
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* Modernized Cards */
+        .card { 
+            background: var(--card-bg); 
+            border-radius: var(--border-radius); 
+            padding: 25px; 
+            margin-bottom: 25px; 
+            box-shadow: var(--shadow-lg); /* Larger premium shadows for floating feel */
+            border: 1px solid #e1e8ed; /* Clean separation */
+            transition: var(--transition);
+        }
+        .card:hover {
+            transform: translateY(-5px); /* Gentle hover animation */
+        }
+        .card-header { font-size: 20px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 12px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+
+        /* Inputs & Modernized Buttons */
+        input, select { 
+            width: 100%; 
+            padding: 14px; 
+            margin-bottom: 18px; 
+            border: 1px solid #d1d8e0; 
+            border-radius: var(--border-radius); 
+            font-size: 16px; 
+            background-color: #f9f9f9;
+            transition: var(--transition);
+        }
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+            outline: none;
+        }
+        .btn { 
+            width: 100%; 
+            padding: 16px; 
+            border: none; 
+            border-radius: var(--border-radius); 
+            font-size: 18px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            color: white; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            background-image: linear-gradient(to right, var(--primary) 0%, var(--primary-light) 51%, var(--primary) 100%);
+            background-size: 200% auto;
+            box-shadow: 0 4px 15px rgba(44, 62, 80, 0.4);
+        }
+        .btn:hover {
+            background-position: right center; /* Shine effect */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 62, 80, 0.5);
+        }
+        .btn-success { 
+            background-image: linear-gradient(to right, #2ecc71 0%, #27ae60) 51%, #2ecc71 100%);
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+        }
+        .btn-success:hover {
+            background-position: right center;
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.5);
+        }
+
+        /* Enhanced Live Score UI */
+        .match-card {
+            background: linear-gradient(to right, #ffffff, #fdfbfb); /* Subtle background gradient */
+            padding: 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid #e1e8ed;
+        }
+        .teams-title { font-size: 18px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; }
+        .main-score { 
+            font-size: 64px; 
+            font-weight: 900; 
+            background: -webkit-linear-gradient(var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 10px 0; 
+            line-height: 1; 
+        }
+        .overs-rr { display: flex; justify-content: space-around; color: var(--primary); font-size: 16px; font-weight: 700; background: rgba(44, 62, 80, 0.05); padding: 15px; border-radius: var(--border-radius); margin-top: 15px;}
+        .target-box { text-align: center; background: rgba(0, 200, 83, 0.1); color: var(--secondary); padding: 12px; border-radius: var(--border-radius); margin-top: 15px; font-weight: bold; border: 2px solid var(--secondary); display: none; font-size: 18px;}
+
+        /* Modernized Stats Tables */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 15px;}
+        th, td { padding: 14px; text-align: center; border-bottom: 1px solid #eee; }
+        th { color: var(--text-muted); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;}
+        td { font-weight: 600; color: var(--primary); }
+        .text-left { text-align: left; }
+        
+        /* Striker player highlighting */
+        .striker { 
+            color: var(--secondary); /* Modern green */
+            font-weight: 800; 
+            position: relative; 
+            padding-left: 20px; /* space for icon */
+        }
+        .striker::before {
+            content: '🏏 '; /* cricket bat icon before name */
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+
+        /* Advanced Keypad with visual depth */
+        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .key-btn { 
+            background-color: #f1f2f6; /* Subtle background */
+            border: 1px solid #d1d8e0;
+            border-radius: var(--border-radius); 
+            padding: 18px 0; 
+            font-size: 22px; 
+            font-weight: bold; 
+            color: var(--primary); 
+            cursor: pointer; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+            transition: var(--transition);
+            overflow: hidden;
+            position: relative;
+        }
+        .key-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-100%);
+            transition: transform 0.2s;
+        }
+        .key-btn:hover::after {
+            transform: translateY(0%);
+        }
+        .key-btn:active { 
+            transform: scale(0.96); 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .key-run { 
+            font-size: 28px; 
+            background: -webkit-linear-gradient(var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .key-out { background-color: var(--danger); color: white; border: none; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.4); }
+        .key-extra { background-color: var(--warning); color: white; border: none; font-size: 18px; box-shadow: 0 4px 10px rgba(243, 156, 18, 0.4); }
+        .key-undo { grid-column: span 3; background-color: #95a5a6; color: white; border: none; font-size: 18px; }
+
+        /* History List enhanced separation */
+        .history-item { 
+            border-left: 5px solid var(--secondary); /* Modern bold green border */
+            padding: 20px; 
+            background: #fdfdfd; 
+            margin-bottom: 15px; 
+            border-radius: var(--border-radius); 
+            box-shadow: var(--shadow);
+            display: grid;
+            grid-template-columns: 80px 1fr 150px; /* Modern layout */
+            align-items: center;
+            transition: var(--transition);
+        }
+        .history-item:hover {
+            background-color: #f1f2f6;
+        }
+        .history-title { font-weight: bold; font-size: 18px; color: var(--primary); }
+        .history-res { color: var(--secondary); font-size: 15px; font-weight: 700; text-align: right;}
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-brand">CricScore</div>
+        <div class="nav-links">
+            <button onclick="switchTab('setup')" class="active" id="tab-setup">Match</button>
+            <button onclick="switchTab('teams')" id="tab-teams">Teams</button>
+            <button onclick="switchTab('history')" id="tab-history">History</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <!-- TEAMS MANAGEMENT SCREEN -->
+        <div id="teams" class="screen">
+            <div class="card">
+                <div class="card-header">🏏 Create New Team</div>
+                <input type="text" id="newTeamName" placeholder="e.g. Mumbai Indian">
+                <button class="btn btn-primary" onclick="addTeam()">Add Team</button>
+            </div>
+            <div class="card">
+                <div class="card-header">🏆 Saved Teams</div>
+                <div id="teamsList"></div>
+            </div>
+        </div>
+
+        <!-- NEW MATCH SETUP SCREEN -->
+        <div id="setup" class="screen active">
+            <div class="card">
+                <div class="card-header">🛠 Match Setup</div>
+                <label style="color: var(--text-muted); font-weight: 600;">Batting Team</label>
+                <select id="teamASelect"><option value="">Select Team</option></select>
+                
+                <label style="color: var(--text-muted); font-weight: 600;">Bowling Team</label>
+                <select id="teamBSelect"><option value="">Select Team</option></select>
+                
+                <label style="color: var(--text-muted); font-weight: 600;">Total Overs</label>
+                <select id="oversSelect">
+                    <option value="2">2 Overs</option>
+                    <option value="5">5 Overs</option>
+                    <option value="10">10 Overs</option>
+                    <option value="20">20 Overs (T20)</option>
+                </select>
+
+                <button class="btn btn-success" style="margin-top: 15px;" onclick="startMatch()">Start Match</button>
+            </div>
+        </div>
+
+        <!-- LIVE SCORING SCREEN -->
+        <div id="live" class="screen">
+            <div class="match-card">
+                <div class="match-header">
+                    <div class="teams-title" id="liveTeamsTitle">Team A vs Team B</div>
+                    <div class="main-score"><span id="liveRuns">0</span>-<span id="liveWickets">0</span> <span style="font-size: 22px; color: var(--text-muted); font-weight: 600;">(<span id="liveOvers">0.0</span>)</span></div>
+                    <div class="overs-rr">
+                        <span>CRR: <span id="liveCRR">0.00</span></span>
+                        <span>Innings: <span id="liveInnings">1</span></span>
+                    </div>
+                    <div class="target-box" id="targetBox">Target: <span id="liveTarget">0</span></div>
+                </div>
+
+                <table style="margin-top: 25px;">
+                    <thead>
+                        <tr><th class="text-left">Batsman</th><th>R</th><th>B</th><th>SR</th></tr>
+                    </thead>
+                    <tbody id="batsmanTable">
+                        <tr><td class="text-left striker">Player 1 *</td><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td class="text-left">Player 2</td><td>0</td><td>0</td><td>0</td></tr>
+                    </tbody>
+                </table>
+
+                <table style="margin-bottom: 25px;">
+                    <thead>
+                        <tr><th class="text-left">Bowler</th><th>O</th><th>M</th><th>R</th><th>W</th></tr>
+                    </thead>
+                    <tbody id="bowlerTable">
+                        <tr><td class="text-left">Bowler 1</td><td>0.0</td><td>0</td><td>0</td><td>0</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="keypad">
+                    <button class="key-btn" onclick="score(0)"><span class="key-run">0</span>Dot</button>
+                    <button class="key-btn" onclick="score(1)"><span class="key-run">1</span>Run</button>
+                    <button class="key-btn" onclick="score(2)"><span class="key-run">2</span>Runs</button>
+                    <button class="key-btn" onclick="score(3)"><span class="key-run">3</span>Runs</button>
+                    <button class="key-btn" onclick="score(4)"><span class="key-run">4</span>Four</button>
+                    <button class="key-btn" onclick="score(6)"><span class="key-run">6</span>Six</button>
+                    
+                    <button class="key-btn key-extra" onclick="extra('wd')">Wide</button>
+                    <button class="key-btn key-extra" onclick="extra('nb')">No Ball</button>
+                    <button class="key-btn key-out" onclick="wicket()">OUT!</button>
+                    
+                    <button class="key-btn key-undo" onclick="undo()">↩ Undo</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORY SCREEN -->
+        <div id="history" class="screen">
+            <div class="card">
+                <div class="card-header">📊 Match History</div>
+                <div id="historyList"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- STATE MANAGEMENT ---
+        let db = {
+            teams: JSON.parse(localStorage.getItem('cricTeams')) || [],
+            matches: JSON.parse(localStorage.getItem('cricHistory')) || []
+        };
+
+        let match = {
+            active: false,
+            batTeam: '', bowlTeam: '', maxOvers: 0,
+            innings: 1, target: null,
+            runs: 0, wickets: 0, balls: 0,
+            historyStack: [] 
+        };
+
+        // --- NAVIGATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+            
+            if(match.active && tabId !== 'live') {
+                if(!confirm("A match is in progress. Do you want to leave the live scoring?")) return;
+            }
+
+            if(tabId === 'live' && !match.active) tabId = 'setup'; 
+            
+            document.getElementById(tabId).classList.add('active');
+            let tabBtn = document.getElementById('tab-' + tabId);
+            if(tabBtn) tabBtn.classList.add('active');
+
+            if(tabId === 'teams') renderTeams();
+            if(tabId === 'setup') updateTeamDropdowns();
+            if(tabId === 'history') renderHistory();
+        }
+
+        // --- TEAMS LOGIC ---
+        function addTeam() {
+            let name = document.getElementById('newTeamName').value.trim();
+            if(!name) return alert('Enter team name');
+            db.teams.push({ id: Date.now(), name: name });
+            saveDB();
+            document.getElementById('newTeamName').value = '';
+            renderTeams();
+            updateTeamDropdowns();
+        }
+
+        function renderTeams() {
+            let html = db.teams.length ? '' : '<p style="color:#757575;">No teams created yet.</p>';
+            db.teams.forEach(t => {
+                html += `<div style="padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--primary);">🏆 ${t.name}</div>`;
+            });
+            document.getElementById('teamsList').innerHTML = html;
+        }
+
+        function updateTeamDropdowns() {
+            let options = '<option value="">Select Team</option>';
+            db.teams.forEach(t => options += `<option value="${t.name}">${t.name}</option>`);
+            document.getElementById('teamASelect').innerHTML = options;
+            document.getElementById('teamBSelect').innerHTML = options;
+        }
+
+        function saveDB() {
+            localStorage.setItem('cricTeams', JSON.stringify(db.teams));
+            localStorage.setItem('cricHistory', JSON.stringify(db.matches));
+        }
+
+        // --- SCORING ENGINE ---
+        function startMatch() {
+            let t1 = document.getElementById('teamASelect').value;
+            let t2 = document.getElementById('teamBSelect').value;
+            let overs = parseInt(document.getElementById('oversSelect').value);
+
+            if(!t1 || !t2) return alert("Select both teams!");
+            if(t1 === t2) return alert("Teams must be different!");
+
+            match = { active: true, batTeam: t1, bowlTeam: t2, maxOvers: overs, innings: 1, target: null, runs: 0, wickets: 0, balls: 0, historyStack: [] };
+            
+            document.getElementById('targetBox').style.display = 'none';
+            document.getElementById('liveTeamsTitle').innerText = `${t1} vs ${t2}`;
+            
+            updateUI();
+            
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('live').classList.add('active');
+            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+        }
+
+        function saveState() {
+            match.historyStack.push({ r: match.runs, w: match.wickets, b: match.balls });
+        }
+
+        function score(runs) {
+            saveState();
+            match.runs += runs;
+            match.balls += 1;
+            checkOverOrInnings();
+        }
+
+        // --- UPDATED EXTRA RUNS LOGIC ---
+        function extra(type) {
+            saveState();
+            
+            if (type === 'nb') {
+                let batRuns = prompt("No Ball! Bat se ya bhag kar kitne run aaye? (0, 1, 2, 4, 6 likhein)", "0");
+                batRuns = parseInt(batRuns) || 0; 
+                match.runs += (1 + batRuns); 
+                
+            } else if (type === 'wd') {
+                let byeRuns = prompt("Wide! Keeper se chhut kar kitne run bhage? (0, 1, 2, 3, 4 likhein)", "0");
+                byeRuns = parseInt(byeRuns) || 0;
+                match.runs += (1 + byeRuns); 
+            }
+
+            // Ball count nahi badhega
+            checkOverOrInnings();
+        }
+
+        function wicket() {
+            saveState();
+            match.wickets += 1;
+            match.balls += 1;
+            checkOverOrInnings();
+        }
+
+        function undo() {
+            if(match.historyStack.length > 0) {
+                let last = match.historyStack.pop();
+                match.runs = last.r;
+                match.wickets = last.w;
+                match.balls = last.b;
+                updateUI();
+            }
+        }
+
+        function checkOverOrInnings() {
+            updateUI();
+            
+            if(match.innings === 2 && match.runs >= match.target) {
+                endMatch(`${match.batTeam} won by ${10 - match.wickets} wickets!`);
+                return;
+            }
+
+            if(match.wickets >= 10 || match.balls >= (match.maxOvers * 6)) {
+                setTimeout(() => {
+                    if(match.innings === 1) {
+                        alert(`Innings Over! Target for ${match.bowlTeam} is ${match.runs + 1}`);
+                        match.innings = 2;
+                        match.target = match.runs + 1;
+                        
+                        let temp = match.batTeam;
+                        match.batTeam = match.bowlTeam;
+                        match.bowlTeam = temp;
+                        
+                        match.runs = 0; match.wickets = 0; match.balls = 0; match.historyStack = [];
+                        
+                        document.getElementById('targetBox').style.display = 'block';
+                        document.getElementById('liveTeamsTitle').innerText = `${match.batTeam} vs ${match.bowlTeam}`;
+                        updateUI();
+                    } else {
+                        let res = '';
+                        if(match.runs >= match.target) res = `${match.batTeam} won!`;
+                        else if(match.runs === match.target - 1) res = `Match Tied!`;
+                        else res = `${match.bowlTeam} won by ${match.target - match.runs - 1} runs!`;
+                        endMatch(res);
+                    }
+                }, 300);
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('liveRuns').innerText = match.runs;
+            document.getElementById('liveWickets').innerText = match.wickets;
+            
+            let overCount = Math.floor(match.balls / 6);
+            let ballsCount = match.balls % 6;
+            document.getElementById('liveOvers').innerText = `${overCount}.${ballsCount}`;
+            
+            let oversBowled = match.balls / 6;
+            let crr = oversBowled > 0 ? (match.runs / oversBowled).toFixed(2) : '0.00';
+            document.getElementById('liveCRR').innerText = crr;
+            document.getElementById('liveInnings').innerText = match.innings;
+
+            if(match.target) document.getElementById('liveTarget').innerText = match.target;
+
+            document.getElementById('batsmanTable').innerHTML = `
+                <tr><td class="text-left striker">Striker *</td><td>${Math.floor(match.runs * 0.6)}</td><td>${Math.floor(match.balls * 0.5)}</td><td>-</td></tr>
+                <tr><td class="text-left">Non-Striker</td><td>${Math.floor(match.runs * 0.3)}</td><td>${Math.floor(match.balls * 0.4)}</td><td>-</td></tr>
+            `;
+            document.getElementById('bowlerTable').innerHTML = `
+                <tr><td class="text-left">Current Bowler</td><td>${overCount}.${ballsCount}</td><td>0</td><td>${match.runs}</td><td>${match.wickets}</td></tr>
+            `;
+        }
+
+        function endMatch(resultText) {
+            alert("Match Over: " + resultText);
+            
+            db.matches.unshift({
+                date: new Date().toLocaleDateString(),
+                title: `${document.getElementById('teamASelect').value} vs ${document.getElementById('teamBSelect').value}`,
+                result: resultText
+            });
+            saveDB();
+            
+            match.active = false;
+            switchTab('history');
+        }
+
+        // --- HISTORY ---
+        function renderHistory() {
+            let html = db.matches.length ? '' : '<p style="color:#757575; text-align: center;">No matches played yet.</p>';
+            db.matches.forEach(m => {
+                html += `
+                <div class="history-item">
+                    <div style="font-size:13px; color:#aaa; font-weight: 600;">${m.date}</div>
+                    <div class="history-title">🏏 ${m.title}</div>
+                    <div class="history-res">${m.result}</div>
+                </div>`;
+            });
+            document.getElementById('historyList').innerHTML = html;
+        }
+
+        // Initialize App
+        updateTeamDropdowns();
+    </script>
+</body>
+</html>
